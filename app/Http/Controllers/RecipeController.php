@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Ingredient;
+use App\Models\Like;
 use App\Models\Method;
 use App\Models\Recipe;
+use App\Models\Ingredient;
 use Illuminate\Http\Request;
 
 class RecipeController extends Controller
@@ -43,19 +44,6 @@ class RecipeController extends Controller
      */
     public function store(Request $request)
     {
-        // $validated = $request->validate([
-        //     // 'title' => 'required|unique:recipes,title',
-        //     // 'description' => 'required',
-        //     // 'ingredients' => 'required',
-        //     // 'methods' => 'required',
-        //     // 'image' => 'required|image|file|max:1024',
-        // ]);
-
-        // $validated['user_id'] = auth()->user()->id;
-        // $validated['image'] = $request->file('image')->store('recipe-images');
-
-        // Recipe::create($validated);
-
         $request->validate([
             'title' => 'required|unique:recipes,title',
             'description' => 'required',
@@ -87,7 +75,7 @@ class RecipeController extends Controller
             $methods->save();
         }
 
-        return redirect()->route('recipes.index');
+        return redirect()->route('recipes.index')->with(['success' => 'Resep berhasil dibuat']);
     }
 
     /**
@@ -98,10 +86,9 @@ class RecipeController extends Controller
      */
     public function show(Recipe $recipe)
     {
-        // dd($recipe);
         $ingredients = $recipe->ingredients;
         $methods = $recipe->methods;
-        // dd($ingredients);
+
         return view('recipes.show', [
             'title' => 'Recipe',
             'recipe' => $recipe,
@@ -110,9 +97,32 @@ class RecipeController extends Controller
         ]);
     }
 
-    public function likeRecipe($id)
+    public function likeRecipe(Request $request)
     {
-        $recipe = Recipe::find($id);
+        $data['user_id'] = auth()->user()->id;
+        $data['recipe_id'] = $request->recipe_id;
+
+        $recipe = Recipe::where('id', $data['recipe_id'])->first();
+
+        // validasi jika user sudah pernah like resep
+        if (Like::where('user_id', $data['user_id'])->where('recipe_id', $data['recipe_id'])->first()) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => "Anda sudah menyukai resep <b>$recipe->title</b> :)"
+            ]);
+        }
+
+        $like = new Like([
+            'user_id' => $data['user_id'],
+            'recipe_id' => $data['recipe_id'],
+        ]);
+        $like->save();
+
+        // $count = Like::where('recipe_id', $like->recipe_id)->count();
+        return response()->json([
+            'status' => 'success',
+            'message' => "Terimakasih sudah menyukai resep <b>$recipe->title</b> :)"
+        ]);
     }
 
     /**

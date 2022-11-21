@@ -50,4 +50,14 @@ class Recipe extends Model
     {
         return $this->hasMany(Method::class);
     }
+
+    /**
+     * Get all of the likes for the Recipe
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
 }

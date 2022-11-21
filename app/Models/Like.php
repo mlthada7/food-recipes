@@ -9,7 +9,7 @@ class Like extends Model
 {
     use HasFactory;
 
-    protected $guarder = ['id'];
+    protected $guarded = ['id'];
 
     /**
      * Get the user that owns the Like

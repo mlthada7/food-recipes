@@ -10,11 +10,11 @@
                     <a class="nav-link fs-5 {{ request()->routeIs('recipes.create') ? 'active' : '' }}" aria-current="page" href="{{ route('recipes.create') }}">Tulis Resep</a>
                 </li>
                 @auth
-                <li class="nav-item nav-link fs-5">
-                    <form action="/logout" method="post">
+                <li class="nav-item">
+                    <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="dropdown-item" href="#"><i class="bi bi-box-arrow-right"></i>
-                            Logout</button>
+                        <a href="{{ route('logout') }}" class="nav-link fs-5" onclick="event.preventDefault();
+                                this.closest('form').submit();">Logout</a>
                     </form>
                 </li>
                 {{-- <li class="nav-item dropdown">
