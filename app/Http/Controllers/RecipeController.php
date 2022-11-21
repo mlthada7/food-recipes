@@ -61,14 +61,12 @@ class RecipeController extends Controller
             'description' => 'required',
             'ingredientName' => 'required|array',
             'methodName' => 'required|array',
-            // "name.*" => 'required',
-            // 'ingredients' => 'required',
-            // 'methods' => 'required',
-            'image' => 'nullable|image|file|max:1024',
+            'image' => 'required|image|file|max:1024',
         ]);
         $recipe = new Recipe([
             'title' => $request->title,
             'description' => $request->description,
+            'image' => $request->file('image')->store('recipe-images'),
             'user_id' => auth()->user()->id,
         ]);
         $recipe->save();
@@ -110,6 +108,11 @@ class RecipeController extends Controller
             'ingredients' => $ingredients,
             'methods' => $methods
         ]);
+    }
+
+    public function likeRecipe($id)
+    {
+        $recipe = Recipe::find($id);
     }
 
     /**

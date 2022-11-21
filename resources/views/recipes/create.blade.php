@@ -29,12 +29,12 @@
                 @enderror
             </div>
             <div class="mb-3" id="ingredientsField">
-                <label for="ingredientName[0]" class="form-label">Bahan-bahan</label>
+                <label for="ingredientName[]" class="form-label">Bahan-bahan</label>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control @error('ingredientName[0]')
+                    <input type="text" class="form-control @error('ingredientName[]')
                         is-invalid
-                    @enderror" id="ingredientName[0]" name="ingredientName[0]" value="{{ old('ingredientName[0]') }}" required>
-                    @error('ingredientName[0]')
+                    @enderror" id="ingredientName[]" name="ingredientName[]" value="{{ old('ingredientName[]') }}" required>
+                    @error('ingredientName[]')
                     <div class="invalid-feedback">
                         {{ $message }}
                     </div>
@@ -97,8 +97,8 @@
 
 <script type="text/javascript">
     // Event untuk tambah item
+    let i = 0;
     $('#addMoreIngredientFieldBtn').click(function(e) {
-        let i = 0;
         ++i;
         $('#ingredientsField').append('<div class="input-group mb-3"><input type="text" class="form-control @error(" ingredientName[' + i + ']") is-invalid @enderror" id="ingredientName[' + i + ']" name="ingredientName[' + i + ']" value="{{ old("ingredientName[' + i + ']") }}" required> @error("ingredientName[' + i + ']") <div class="invalid-feedback">{{ $message }}</div>@enderror <button class="btn btn-outline-secondary" type="button" id="removeFieldBtn">X</button></div>');
     });
@@ -107,10 +107,10 @@
     });
 
     // Event untuk tambah langkah pembuatan
+    let j = 0;
     $('#addMoreMethodFieldBtn').click(function(e) {
-        let i = 0;
-        ++i;
-        $('#methodsField').append('<div class="input-group mb-3"><input type="text" class="form-control @error(" methodName[' + i + ']") is-invalid @enderror" id="methodName[' + i + ']" name="methodName[' + i + ']" value="{{ old("methodName[' + i + ']") }}" required> @error("methodName[' + i + ']") <div class="invalid-feedback">{{ $message }}</div>@enderror <button class="btn btn-outline-secondary" type="button" id="removeMethodFieldBtn">X</button></div>');
+        ++j;
+        $('#methodsField').append('<div class="input-group mb-3"><input type="text" class="form-control @error(" methodName[' + j + ']") is-invalid @enderror" id="methodName[' + j + ']" name="methodName[' + j + ']" value="{{ old("methodName[' + j + ']") }}" required> @error("methodName[' + j + ']") <div class="invalid-feedback">{{ $message }}</div>@enderror <button class="btn btn-outline-secondary" type="button" id="removeMethodFieldBtn">X</button></div>');
     });
     $(document).on('click', '#removeMethodFieldBtn', function() {
         $(this).parent().remove();
