@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ingredient;
+use App\Models\Method;
 use App\Models\Recipe;
 use Illuminate\Http\Request;
 
@@ -41,18 +43,51 @@ class RecipeController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        // $validated = $request->validate([
+        //     // 'title' => 'required|unique:recipes,title',
+        //     // 'description' => 'required',
+        //     // 'ingredients' => 'required',
+        //     // 'methods' => 'required',
+        //     // 'image' => 'required|image|file|max:1024',
+        // ]);
+
+        // $validated['user_id'] = auth()->user()->id;
+        // $validated['image'] = $request->file('image')->store('recipe-images');
+
+        // Recipe::create($validated);
+
+        $request->validate([
             'title' => 'required|unique:recipes,title',
             'description' => 'required',
-            'ingredients' => 'required',
-            'methods' => 'required',
-            'image' => 'required|image|file|max:1024',
+            'ingredientName' => 'required|array',
+            'methodName' => 'required|array',
+            // "name.*" => 'required',
+            // 'ingredients' => 'required',
+            // 'methods' => 'required',
+            'image' => 'nullable|image|file|max:1024',
         ]);
+        $recipe = new Recipe([
+            'title' => $request->title,
+            'description' => $request->description,
+            'user_id' => auth()->user()->id,
+        ]);
+        $recipe->save();
 
-        $validated['user_id'] = auth()->user()->id;
-        $validated['image'] = $request->file('image')->store('recipe-images');
+        foreach ($request->ingredientName as $key => $value) {
+            $ingredients = new Ingredient([
+                'name' => $value,
+                'recipe_id' => $recipe->id
+            ]);
+            $ingredients->save();
+        }
 
-        Recipe::create($validated);
+        foreach ($request->methodName as $key => $value) {
+            $methods = new Method([
+                'name' => $value,
+                'recipe_id' => $recipe->id
+            ]);
+            $methods->save();
+        }
 
         return redirect()->route('recipes.index');
     }
@@ -65,9 +100,15 @@ class RecipeController extends Controller
      */
     public function show(Recipe $recipe)
     {
+        // dd($recipe);
+        $ingredients = $recipe->ingredients;
+        $methods = $recipe->methods;
+        // dd($ingredients);
         return view('recipes.show', [
             'title' => 'Recipe',
-            'recipe' => $recipe
+            'recipe' => $recipe,
+            'ingredients' => $ingredients,
+            'methods' => $methods
         ]);
     }
 

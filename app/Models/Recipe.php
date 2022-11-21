@@ -13,11 +13,13 @@ class Recipe extends Model
     protected $fillable = [
         'title',
         'description',
-        'ingredients',
-        'methods',
+        // 'ingredients',
+        // 'methods',
         'image',
         'user_id'
     ];
+
+    // protected $with = ['ingredients'];
 
     /**
      * Get the user that owns the Recipe
@@ -27,5 +29,25 @@ class Recipe extends Model
     public function author()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * Get all of the ingredients for the Recipe
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function ingredients()
+    {
+        return $this->hasMany(Ingredient::class);
+    }
+
+    /**
+     * Get all of the methods for the Recipe
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function methods()
+    {
+        return $this->hasMany(Method::class);
     }
 }

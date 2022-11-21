@@ -18,14 +18,18 @@
             </div>
             <div class="mb-4">
                 <h2>Bahan-bahan</h2>
-                {!! nl2br($recipe->ingredients) !!}
+                @foreach($ingredients as $bahan)
+                <span>{{ $bahan->name }}</span><br>
+                @endforeach
             </div>
             <div class="mb-4">
                 <h2>Langkah Pembuatan</h2>
-                <p>{!! nl2br($recipe->methods) !!}</p>
+                <ol>
+                    @foreach($methods as $langkah)
+                    <li>{{ $langkah->name }}</li>
+                    @endforeach
+                </ol>
             </div>
-
-
         </section>
     </div>
 </div>

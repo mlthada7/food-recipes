@@ -28,27 +28,41 @@
                 </div>
                 @enderror
             </div>
-            <div class="mb-3">
-                <label for="ingredients" class="form-label">Bahan-bahan</label>
-                <textarea type="text" class="form-control @error('ingredients')
-                    is-invalid
-                @enderror" id="ingredients" name="ingredients" value="{{ old('ingredients') }}"></textarea>
-                @error('ingredients')
-                <div class="invalid-feedback">
-                    {{ $message }}
+            <div class="mb-3" id="ingredientsField">
+                <label for="ingredientName[0]" class="form-label">Bahan-bahan</label>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control @error('ingredientName[0]')
+                        is-invalid
+                    @enderror" id="ingredientName[0]" name="ingredientName[0]" value="{{ old('ingredientName[0]') }}" required>
+                    @error('ingredientName[0]')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                    @enderror
+                    <button class="btn btn-outline-secondary" type="button" id="removeIngredientFieldBtn">X</button>
                 </div>
-                @enderror
             </div>
-            <div class="mb-3">
-                <label for="methods" class="form-label">Langkah Pembuatan</label>
-                <textarea type="text" class="form-control @error('methods')
-                    is-invalid
-                @enderror" id="methods" name="methods" value="{{ old('methods') }}"></textarea>
-                @error('methods')
-                <div class="invalid-feedback">
-                    {{ $message }}
+            <div class="mb-4">
+                <button type="button" class="btn btn-outline-secondary" id="addMoreIngredientFieldBtn">+ Item Bahan</button>
+            </div>
+
+
+            <div class="mb-3" id="methodsField">
+                <label for="methodName[0]" class="form-label">Langkah Pembuatan</label>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control @error('methodName[0]')
+                        is-invalid
+                    @enderror" id="methodName[0]" name="methodName[0]" value="{{ old('methodName[0]') }}" required>
+                    @error('methodName[0]')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                    @enderror
+                    <button class="btn btn-outline-secondary" type="button" id="removeMethodFieldBtn">X</button>
                 </div>
-                @enderror
+            </div>
+            <div class="mb-4">
+                <button type="button" class="btn btn-outline-secondary" id="addMoreMethodFieldBtn">+ Item Langkah</button>
             </div>
 
             <div class="mb-3">
@@ -63,9 +77,45 @@
                 @enderror
             </div>
 
-            <button type="submit" class="btn btn-primary">Terbitkan Resep</button>
-        </form>
-    </div>
+            {{-- <div class="mb-3">
+                <label for="methods" class="form-label">Langkah Pembuatan</label>
+                <textarea type="text" class="form-control @error('methods')
+                    is-invalid
+                @enderror" id="methods" name="methods" value="{{ old('methods') }}"></textarea>
+            @error('methods')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+            @enderror
+    </div> --}}
+
+
+    <button type="submit" class="btn btn-primary">Terbitkan Resep</button>
+    </form>
 </div>
+</div>
+
+<script type="text/javascript">
+    // Event untuk tambah item
+    $('#addMoreIngredientFieldBtn').click(function(e) {
+        let i = 0;
+        ++i;
+        $('#ingredientsField').append('<div class="input-group mb-3"><input type="text" class="form-control @error(" ingredientName[' + i + ']") is-invalid @enderror" id="ingredientName[' + i + ']" name="ingredientName[' + i + ']" value="{{ old("ingredientName[' + i + ']") }}" required> @error("ingredientName[' + i + ']") <div class="invalid-feedback">{{ $message }}</div>@enderror <button class="btn btn-outline-secondary" type="button" id="removeFieldBtn">X</button></div>');
+    });
+    $(document).on('click', '#removeIngredientFieldBtn', function() {
+        $(this).parent().remove();
+    });
+
+    // Event untuk tambah langkah pembuatan
+    $('#addMoreMethodFieldBtn').click(function(e) {
+        let i = 0;
+        ++i;
+        $('#methodsField').append('<div class="input-group mb-3"><input type="text" class="form-control @error(" methodName[' + i + ']") is-invalid @enderror" id="methodName[' + i + ']" name="methodName[' + i + ']" value="{{ old("methodName[' + i + ']") }}" required> @error("methodName[' + i + ']") <div class="invalid-feedback">{{ $message }}</div>@enderror <button class="btn btn-outline-secondary" type="button" id="removeMethodFieldBtn">X</button></div>');
+    });
+    $(document).on('click', '#removeMethodFieldBtn', function() {
+        $(this).parent().remove();
+    });
+
+</script>
 
 @endsection
